@@ -7,14 +7,16 @@ use super::stone::Item;
 use uuid::Uuid;
 
 pub struct Game {
+    pub time: u8,
     pub map: Vec<Vec<u8>>,
     pub players: HashMap<Uuid, Player>,
     pub families: Vec<Uuid>,
 }
 
 impl Game {
-    pub fn new() -> Game {
+    pub fn new(time: u8) -> Game {
         Game {
+            time: time,
             map: Vec::new(),
             players: HashMap::new(),
             families: Vec::new(),

@@ -1,0 +1,6 @@
+- Each player starts with 10 food and 0 stones.
+- Each player starts on level 1.
+- As you level up, your player sight improves.
+- You must eat to survive and not starve and die.
+- You must collect stones to level up.
+- To win the game you must have at least 6 players of your family/team at level 8.

@@ -8,4 +8,8 @@ fn main() {
         println!("{:?}", row);
     }
     println!("stones: {:?}", stone::Stone::all());
+    // game loop (non-blocking)
+    // check if there are commands to execute (after the player action timeout has ended)
+    // check if 127/t time has passed to decrease the player's food
+    // check if there is data received on the socket (using epoll)
 }

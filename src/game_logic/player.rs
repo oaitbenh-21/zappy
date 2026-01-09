@@ -35,7 +35,7 @@ impl Player {
             family: family,
         };
     }
-    pub fn eat(&mut self, item: Item) {
+    pub fn pick(&mut self, item: Item) {
         if (matches!(item, Item::Food)) {
             // handle logic of eat food(time coin)
             return;

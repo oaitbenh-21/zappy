@@ -1,48 +1,87 @@
 use std::collections::HashMap;
 
+use crate::game_logic::config::WorldConfig;
+
 use super::player::Player;
 use super::stone::Item;
+use rand::{Rng, thread_rng};
 use uuid::Uuid;
 
-pub struct Game {
-    pub time: u8,
-    pub map: Vec<Vec<u8>>,
+pub struct GameWorld {
+    pub current_time: u32,
+    pub world_map: Vec<Vec<Square>>,
+    pub families: Vec<String>,
     pub players: HashMap<Uuid, Player>,
-    pub families: Vec<Uuid>,
+    pub world_config: WorldConfig,
 }
 
-impl Game {
-    pub fn new(time: u8) -> Game {
-        Game {
-            time: time,
-            map: Vec::new(),
+impl GameWorld {
+    pub fn new() -> GameWorld {
+        GameWorld {
+            current_time: 0,
+            world_map: Vec::new(),
             players: HashMap::new(),
             families: Vec::new(),
+            world_config: WorldConfig::new(
+                Vec::from([String::from("Yellow"), String::from("Green")]),
+                1,
+                1,
+            ),
         }
     }
 
-    pub fn add_player(&mut self, player: Uuid) {
-        self.players.insert(player, Player::new());
+    pub fn initialize_map(&mut self) -> Vec<Vec<Square>> {
+        let mut world_map: Vec<Vec<Square>> = Vec::new();
+        for _row in 0..=self.world_config.world_height {
+            let mut map_row: Vec<Square> = Vec::new();
+            for _col in 0..=self.world_config.world_widht {
+                let mut current_square: Square = Square::new();
+                for _turn in 0..3 {
+                    match Item::get_random() {
+                        Some(getted_item) => {
+                            current_square.objects.push(getted_item);
+                        }
+                        None => {}
+                    }
+                }
+                println!("{:?}", current_square);
+                map_row.push(current_square);
+            }
+            world_map.push(map_row);
+        }
+        return world_map;
     }
-    pub fn kill_player(&mut self, player: Uuid) {
-        self.players.remove(&player);
+
+    pub fn join_player(&mut self, player: Uuid) {
+        let mut rng = thread_rng();
+        let col = rng.gen_range(0..=self.world_config.world_widht);
+        let row = rng.gen_range(0..=self.world_config.world_height);
+        self.players.insert(player, Player::new(col, row));
+    }
+    pub fn resolve_action(action: String, action_arg: String) {
+        // resolve actions logic
     }
 }
 
-pub struct Tile {
+#[derive(Debug)]
+pub struct Square {
     pub objects: Vec<Item>,
     pub players: Vec<Uuid>,
-    pub x: usize,
-    pub y: usize,
 }
 
-impl Tile {
-    pub fn new(row: usize, col: usize) -> Tile {
-        Tile {
+impl Square {
+    pub fn new() -> Square {
+        Square {
             objects: Vec::new(),
             players: Vec::new(),
-            x: col,
-            y: row,
         }
+    }
+    pub fn randomize() -> Square {
+        let mut objects: Vec<Item> = Vec::new();
+        for _resources_count in 0..3 {}
+        return Square {
+            objects: Vec::new(),
+            players: Vec::new(),
+        };
     }
 }

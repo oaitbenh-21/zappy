@@ -46,7 +46,7 @@ impl Player {
     pub fn pick(&mut self, item: Item) {
         if let Item::Stone(stone) = item {
             // handle logic of stone eat and calculate level of player
-            let count = self.stones.entry(stone).or_insert(1);
+            let count = self.stones.entry(stone).or_insert(0);
             *count += 1;
         } else {
             // handle logic of eat food(time coin)

@@ -32,13 +32,14 @@ impl GameWorld {
 
     pub fn initialize_map(&mut self) -> Vec<Vec<Square>> {
         let mut world_map: Vec<Vec<Square>> = Vec::new();
-        for _row in 0..=self.world_config.world_height {
+        for _row in 1..=self.world_config.world_height {
             let mut map_row: Vec<Square> = Vec::new();
-            for _col in 0..=self.world_config.world_widht {
+            for _col in 1..=self.world_config.world_widht {
                 let mut current_square: Square = Square::new();
                 for _turn in 0..3 {
                     match Item::get_random() {
                         Some(getted_item) => {
+                            // rule based adding of items
                             current_square.objects.push(getted_item);
                         }
                         None => {}
@@ -58,8 +59,10 @@ impl GameWorld {
         let row = rng.gen_range(0..=self.world_config.world_height);
         self.players.insert(player, Player::new(col, row));
     }
-    pub fn resolve_action(action: String, action_arg: String) {
-        // resolve actions logic
+    pub fn resolve_action(action: Action) {
+        // take action from here as Action::Pick(Item)
+        // check is Player can perform this action
+        // like is this item still valid in the square(position)
     }
 }
 

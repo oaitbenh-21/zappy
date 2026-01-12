@@ -14,9 +14,13 @@ pub enum Action {
 
 impl Action {
     pub fn parse_action(cmd: String) -> Some(Action) {
-        let trimmed_cmd = cmd.as_str().trim()
+        let trimmed_cmd = cmd.as_str().trim();
+        // complete the logic of parsing commands
+        // from "pick linemate(type of stones)"
+        // to Action::Pick(Item::Stone(Linemate))
+        // may i'll change return value from Option to Result
         return None;
-    } 
+    }
 }
 
 

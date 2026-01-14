@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
-use crate::game_logic::config::WorldConfig;
+use crate::game_logic::{actions::Direction, config::WorldConfig, player};
 
-use super::player::Player;
 use super::actions::Action;
+use super::player::Player;
 use super::stone::Item;
 use rand::{Rng, thread_rng};
 use uuid::Uuid;
@@ -31,7 +31,7 @@ impl GameWorld {
         }
     }
 
-    pub fn initialize_map(&mut self) -> Vec<Vec<Square>> {
+    pub fn initialize_map(&mut self) {
         let mut world_map: Vec<Vec<Square>> = Vec::new();
         for _row in 1..=self.world_config.world_height {
             let mut map_row: Vec<Square> = Vec::new();
@@ -46,24 +46,67 @@ impl GameWorld {
                         None => {}
                     }
                 }
-                println!("{:?}", current_square);
+                // print!("{}", current_square.objects.len());
                 map_row.push(current_square);
             }
             world_map.push(map_row);
         }
-        return world_map;
+        self.world_map = world_map;
+    }
+
+    pub fn dump_map(&self) {
+        for row in self.world_map.iter() {
+            for col in row.iter() {
+                print!("_{}", col.players.len());
+            }
+            println!();
+        }
     }
 
     pub fn join_player(&mut self, player: Uuid) {
         let mut rng = thread_rng();
-        let col = rng.gen_range(0..=self.world_config.world_widht);
-        let row = rng.gen_range(0..=self.world_config.world_height);
+        let col = rng.gen_range(1..=self.world_config.world_widht) - 1;
+        let row = rng.gen_range(1..=self.world_config.world_height) - 1;
         self.players.insert(player, Player::new(col, row));
+        self.world_map[row][col].players.push(player);
     }
-    pub fn resolve_action(action: Action) {
-        // take action from here as Action::Pick(Item)
-        // check is Player can perform this action
-        // like is this item still valid in the square(position)
+    pub fn move_player(&mut self, pid: Uuid, dir: Direction) {
+        let mut player_option = self.players.get_mut(&pid);
+        match player_option {
+            Some(player) => {
+                self.world_map[player.y][player.x]
+                    .players
+                    .retain(|uuid| *uuid != pid);
+                // let newx = 0;
+                // let newy = 0;
+                match dir {
+                    // i should to implement logic of where players looking at
+                    Direction::Forward => {
+                        if (player.y != 0) {
+                            player.y -= 1;
+                        } else {
+                            player.y = self.world_config.world_height - 1;
+                        }
+                        player.y -= 1;
+                    }
+                    Direction::Left => {
+                        if (player.x != 0) {
+                            player.x -= 1;
+                        } else {
+                            player.x = self.world_config.world_widht - 1;
+                        }
+                    }
+                    Direction::Right => {
+                        player.x += 1;
+                    }
+                }
+                player.x %= self.world_config.world_widht;
+                player.y %= self.world_config.world_height;
+                println!("y: {}\nx: {}", player.y, player.x);
+                self.world_map[player.y][player.x].players.push(pid);
+            }
+            None => {}
+        }
     }
 }
 

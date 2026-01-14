@@ -24,8 +24,8 @@ impl WorldConfig {
             time_per_sec: time_unit_per_sec,
             players_per_team: players_per_team,
             // those configs represent the rules of game
-            world_widht: 80,
-            world_height: 20,
+            world_widht: 5,
+            world_height: 5,
             initial_food: 10, // defined in the game subject
             initial_level: 1, // there is no game starts at level 2
             food_per_square: 2,

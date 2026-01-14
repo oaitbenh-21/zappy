@@ -2,4 +2,4 @@ pub mod game;
 pub mod player;
 pub mod stone;
 pub mod config;
-pub mod action;
+pub mod actions;

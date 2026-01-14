@@ -1,3 +1,5 @@
+use super::stone::Item;
+
 // the server will send this and the player uuid
 // to perform any action I need to know which player is
 // trying to do it and what action they want to perform
@@ -13,7 +15,7 @@ pub enum Action {
 }
 
 impl Action {
-    pub fn parse_action(cmd: String) -> Some(Action) {
+    pub fn parse_action(cmd: String) -> Option<Action> {
         let trimmed_cmd = cmd.as_str().trim();
         // complete the logic of parsing commands
         // from "pick linemate(type of stones)"
@@ -22,7 +24,6 @@ impl Action {
         return None;
     }
 }
-
 
 pub enum Direction {
     Left,
